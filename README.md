@@ -16,8 +16,10 @@ SSD for object detection in matlab. SSD网络用于目标检测（Matlab版）�
       更改图像路径。（第24行：Img_Path = 'pedestrian2.jpg';）
       
 3 Basic layers in CNN
+
   To be continued.  未完待续。
 
 4 SSD(Single Shot Detector) architecture
+
   To be continued.   未完待续。 
     
