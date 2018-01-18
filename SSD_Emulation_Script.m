@@ -1,24 +1,25 @@
 %% 
 %-----------SSD_Emulation_Script--------
-%×÷  Õß£ºÑî·«
-%¹«  Ë¾£ºBJTU
-%¹¦  ÄÜ£ºSSDÄ£Äâ³ÌĞò(for pic)¡£
-%Êä  Èë£º
-%       Img_Path    -----> ÊäÈëÍ¼ÏñÂ·¾¶¡£
-%       Description -----> Prior Box ²ÎÊı½á¹¹Ìå¡£
-%Êä  ³ö£º
+%ä½œ  è€…ï¼šæ¨å¸†
+%å…¬  å¸ï¼šBJTU
+%åŠŸ  èƒ½ï¼šSSDæ¨¡æ‹Ÿç¨‹åº(for pic)ã€‚
+%è¾“  å…¥ï¼š
+%       Img_Path    -----> è¾“å…¥å›¾åƒè·¯å¾„ã€‚
+%       Description -----> Prior Box å‚æ•°ç»“æ„ä½“ã€‚
+%è¾“  å‡ºï¼š
 %       
-%±¸  ×¢£ºMatlab 2016a¡£
+%å¤‡  æ³¨ï¼šMatlab 2016aã€‚
 %----------------------------------------
 
 %%
-% Çå¿Õ¹¤×÷¿Õ¼ä
+% æ¸…ç©ºå·¥ä½œç©ºé—´
 
 clear all;
 clc
+addpath './Layers';
 
 %%
-% ³õÊ¼²ÎÊıÉè¶¨
+% åˆå§‹å‚æ•°è®¾å®š
 
 Img_Path = 'pedestrian2.jpg';
 
@@ -33,12 +34,12 @@ Description.feature_size = [38, 38; 19, 19; 10, 10; 5, 5; 3, 3; 1, 1];
 Description.scale = [0.15, 0.2, 0.37, 0.54, 0.71, 0.88];
 
 %%
-% Í¼Ïñ¶ÁÈ¡¡£
+% å›¾åƒè¯»å–ã€‚
 
 img = imread(Img_Path);
 
 %%
-% ÍøÂçÉùÃ÷£¨¿ªÆô´úÂëÌ½²é£©
+% ç½‘ç»œå£°æ˜ï¼ˆå¼€å¯ä»£ç æ¢æŸ¥ï¼‰
 
 % profile on;
 net = Load_Net();
@@ -47,7 +48,7 @@ roi_table = SSD_Net(net, img, 21, Description);
 % profile viewer;
 
 %%
-% ·Ç¼«´óÖµÒÖÖÆ
+% éæå¤§å€¼æŠ‘åˆ¶
 
 img = imread(Img_Path);
 img = im2double(img);
@@ -73,7 +74,7 @@ for i = 1: length(pick)
 end
 
 %%
-% ÌØÕ÷Í¼¿ÉÊÓ»¯
+% ç‰¹å¾å›¾å¯è§†åŒ–
 
 % feature_map = conv4_3_norm;
 % 
@@ -85,7 +86,7 @@ end
 % end
 
 %%
-% ¾í»ıºË¿ÉÊÓ»¯
+% å·ç§¯æ ¸å¯è§†åŒ–
 
 % kernel = net.conv1_1_w;
 % for i = 1: size(kernel, 4)
