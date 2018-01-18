@@ -1,53 +1,53 @@
 %% 
 %-----------------Conv3d-----------------
-%×÷  Õß£ºÑî·«
-%¹«  Ë¾£ºBJTU
-%¹¦  ÄÜ£º3Î¬¾í»ı¡£
-%Êä  Èë£º
-%       in_array    -----> ÊäÈë¸ßÎ¬Êı×é£¨dim = 3£©¡£
-%       kernels     -----> ¾í»ıºË£¨dim = 4£©¡£
-%       bias        -----> Æ«ÖÃ¡£
-%       stride      -----> ²½³¤¡£
-%       padding     -----> Ìî³äÏñËØÊı¡£
-%       dilation    -----> ¾í»ıºËÅòÕÍ¾àÀë¡£
-%Êä  ³ö£º
-%       out_array   -----> Êä³ö¸ßÎ¬Êı×é£¨dim = 3£©¡£
-%±¸  ×¢£ºMatlab 2016a¡£
+%ä½œ  è€…ï¼šæ¨å¸†
+%å…¬  å¸ï¼šBJTU
+%åŠŸ  èƒ½ï¼š3ç»´å·ç§¯ã€‚
+%è¾“  å…¥ï¼š
+%       in_array    -----> è¾“å…¥é«˜ç»´æ•°ç»„ï¼ˆdim = 3ï¼‰ã€‚
+%       kernels     -----> å·ç§¯æ ¸ï¼ˆdim = 4ï¼‰ã€‚
+%       bias        -----> åç½®ã€‚
+%       stride      -----> æ­¥é•¿ã€‚
+%       padding     -----> å¡«å……åƒç´ æ•°ã€‚
+%       dilation    -----> å·ç§¯æ ¸è†¨èƒ€è·ç¦»ã€‚
+%è¾“  å‡ºï¼š
+%       out_array   -----> è¾“å‡ºé«˜ç»´æ•°ç»„ï¼ˆdim = 3ï¼‰ã€‚
+%å¤‡  æ³¨ï¼šMatlab 2016aã€‚
 %----------------------------------------
 
 %%
 
 function out_array = Conv3d(in_array, kernels, bias, stride, padding, dilation)
 
-    % ¼ì²éÊı¾İÎ¬Êı    
+    % æ£€æŸ¥æ•°æ®ç»´æ•°    
     in_dims = ndims(in_array);
     if(in_dims == 3)
         [height, width, depth] = size(in_array);
     else
-        error('ÊäÈëÊı¾İÎ¬¶ÈĞ¡ÓÚ3Î¬£¬Çë¼ì²éÊäÈëÊı¾İ¡£');
+        error('è¾“å…¥æ•°æ®ç»´åº¦å°äº3ç»´ï¼Œè¯·æ£€æŸ¥è¾“å…¥æ•°æ®ã€‚');
     end
     
     if(ndims(kernels) < 4)
-        error('ÊäÈë¾í»ıºËÎ¬¶ÈĞ¡ÓÚ4Î¬£¬Çë¼ì²éÊäÈëÊı¾İ¡£')
+        error('è¾“å…¥å·ç§¯æ ¸ç»´åº¦å°äº4ç»´ï¼Œè¯·æ£€æŸ¥è¾“å…¥æ•°æ®ã€‚')
     else
         [k_height, k_width, k_depth, k_num] = size(kernels);
         n_kwidth = (k_width - 1) * dilation + 1;
         n_kheight = (k_height - 1) * dilation + 1;
     end
     
-    % ¼ì²ébiasÊıÄ¿ÊÇ·ñÓëÊäÈëÊı×éÒ»ÖÂ
+    % æ£€æŸ¥biasæ•°ç›®æ˜¯å¦ä¸è¾“å…¥æ•°ç»„ä¸€è‡´
     if(k_num ~= length(bias))
-        error('biasÊıÄ¿ÓëÊäÈëÊı×é²»Ò»ÖÂ£¬Çë¼ì²éÊäÈëÊı¾İ¡£');
+        error('biasæ•°ç›®ä¸è¾“å…¥æ•°ç»„ä¸ä¸€è‡´ï¼Œè¯·æ£€æŸ¥è¾“å…¥æ•°æ®ã€‚');
     end
           
-    % Ìî³ä    
+    % å¡«å……    
     n_height = height + 2 * padding;
     n_width = width + 2 * padding;
     pad_in_array = zeros(n_height, n_width, depth);    
     pad_in_array(1 + padding: padding + width, 1 + padding: padding + height, :)...
         = in_array;
     
-    % È·¶¨Êä³ö´óĞ¡
+    % ç¡®å®šè¾“å‡ºå¤§å°
     o_height = floor((n_height - n_kheight) / stride + 1);
     o_width = floor((n_width - n_kwidth) / stride + 1);
     out_array = zeros(o_height, o_width, k_num);
@@ -76,22 +76,7 @@ function out_array = Conv3d(in_array, kernels, bias, stride, padding, dilation)
     out_array_ = ker * in_array_;
     out_array = permute(reshape(out_array_, k_num, o_height, o_width), [2, 3, 1]);
     
-%     % ´°¿Ú»¬¶¯
-%     for k = 1: k_num
-%       ker = kernel(:,:,:,k);
-%       for i = 1 : stride: n_height - window_size + 1
-%         for j = 1 : stride: n_width - window_size + 1
-% 
-%             % ÌáÈ¡Í¼Ïñ¿é
-%             block = pad_in_array(i: i + window_size - 1, ...
-%                 j: j + window_size - 1, :);
-%             out_array(1 + (i - 1) / stride, 1 + (j - 1) / stride, k) = ...
-%               block .* ker;
-%         end
-%       end
-%     end
-
-    % Ìí¼ÓÆ«ÖÃ
+    % æ·»åŠ åç½®
     for k = 1: k_num
         out_array(:, :, k) = out_array(:, :, k) + bias(k);
     end
